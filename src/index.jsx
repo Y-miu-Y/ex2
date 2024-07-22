@@ -12,14 +12,14 @@ const supabaseClient = createClient(
 
 console.log(supabaseClient);
 
-const studyRecordClient = async() => (
-  { data, error } = await supabaseClient
+const studyRecordClient = async () => {
+  const { data, error } = await supabaseClient
     .from('study-record')
-    .select()
-);
+    .select("*")
+  return data;
+};
 
-console.log(studyRecordClient.data);
-console.log(studyRecordClient.error);
+console.log(studyRecordClient);
 
 // ----------------------------------------------------------
 const root = createRoot(document.getElementById("root"));
