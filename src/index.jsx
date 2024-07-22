@@ -14,8 +14,8 @@ console.log(supabaseClient);
 
 const studyRecordClient = async() => (
   { data, error } = await supabaseClient
-      .from('countries')
-      .select()
+    .from('study-record')
+    .select()
 );
 
 console.log(studyRecordClient.data);
