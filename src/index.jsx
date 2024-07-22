@@ -19,6 +19,7 @@ const studyRecordClient = async() => (
 );
 
 console.log(studyRecordClient.data);
+console.log(studyRecordClient.error);
 
 // ----------------------------------------------------------
 const root = createRoot(document.getElementById("root"));
