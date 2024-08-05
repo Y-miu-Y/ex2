@@ -37,22 +37,17 @@ export const StudyRecord = () =>{
         setError("");
     }
 
-    const onClickDeleteRecord = (uniqueKey) => {
-        if (title === "" || time === "") {
-            setError("入力されていない項目があります");
-            return;
-        }
-        const insertRecord = async() => {
+    const onClickDeleteRecord = () => {
+        const deleteRecord = async(key) => {
             return await supabaseClient
-            .from('study-record')
-            .insert({title, time});
+                .from('study-record')
+                .delete()
+                .eq('id', key);
         };
-        insertRecord();
+        deleteRecord(uniqueKey);
 
-        const newRecords = [...records, {title, time}];
+        const newRecords = records.filter((rec) => rec === uniqueKey);
         setRecords(newRecords);
-        setTitle("");
-        setTime(0);
         setError("");
     }
 
@@ -85,7 +80,7 @@ export const StudyRecord = () =>{
                     onChangeTitle={onChangeTitle}
                     time={time}
                     onChangeTime={onChangeTime}/>
-                <DataTable records={records}/>
+                <DataTable records={records} onClickDelete={onClickDeleteRecord}/>
                 <AddRecord onClick={onClickAddRecord}/>
                 <ErrorMessage message={error}/>
                 <TotalTime records={records} />

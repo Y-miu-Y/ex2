@@ -1,4 +1,4 @@
-export const DataRow = ({ record }) => {
+export const DataRow = ({ record, onClickDelete }) => {
     const styleTime = {
         padding: "5px",
     }
@@ -7,7 +7,7 @@ export const DataRow = ({ record }) => {
         <>
             <span>{record.title}</span>
             <span style={styleTime}>{record.time}時間</span>
-            <button onClick={null}>削除</button>
+            <button onClick={onClickDelete}>削除</button>
             <br/>
         </>
     );
