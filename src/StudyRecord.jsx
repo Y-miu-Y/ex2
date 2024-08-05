@@ -23,11 +23,20 @@ export const StudyRecord = () =>{
             setError("入力されていない項目があります");
             return;
         }
+        const insertRecord = async() => {
+            return await supabaseClient
+            .from('study-record')
+            .insert({title, time});
+        };
+        insertRecord();
+
         const newRecords = [...records, {title, time}];
         setRecords(newRecords);
         setTitle("");
         setTime(0);
         setError("");
+
+        
     }
 
     useEffect(() => {
