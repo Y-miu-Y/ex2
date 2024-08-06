@@ -29,7 +29,7 @@ export const StudyRecord = () =>{
             .insert({title, time});
         };
         insertRecord();
-
+        
         const newRecords = [...records, {title, time}];
         setRecords(newRecords);
         setTitle("");
@@ -37,7 +37,7 @@ export const StudyRecord = () =>{
         setError("");
     }
 
-    const onClickDeleteRecord = () => {
+    const onClickDeleteRecord = (uniqueKey) => {
         const deleteRecord = async(key) => {
             return await supabaseClient
                 .from('study-record')
@@ -46,7 +46,7 @@ export const StudyRecord = () =>{
         };
         deleteRecord(uniqueKey);
 
-        const newRecords = records.filter((rec) => rec === uniqueKey);
+        const newRecords = records.filter((rec) => rec.id !== uniqueKey);
         setRecords(newRecords);
         setError("");
     }

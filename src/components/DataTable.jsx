@@ -6,7 +6,7 @@ export const DataTable = ({records, onClickDelete}) => {
         <ul>
             {records.map((row) =>
                 <li key={row.id}>
-                    <DataRow record={row} onClick={onClickDelete}/>
+                    <DataRow record={row} onClickDelete={onClickDelete}/>
                 </li>
             )}
         </ul>

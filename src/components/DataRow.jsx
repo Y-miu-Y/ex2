@@ -7,7 +7,7 @@ export const DataRow = ({ record, onClickDelete }) => {
         <>
             <span>{record.title}</span>
             <span style={styleTime}>{record.time}時間</span>
-            <button onClick={onClickDelete}>削除</button>
+            <button onClick={() => onClickDelete(record.id)}>削除</button>
             <br/>
         </>
     );
