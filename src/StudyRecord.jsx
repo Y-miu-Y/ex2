@@ -73,7 +73,7 @@ export const StudyRecord = () =>{
         );
     } else {
         return(
-            <>
+            <div>
                 <Title />
                 <InputForm
                     title={title}
@@ -82,9 +82,9 @@ export const StudyRecord = () =>{
                     onChangeTime={onChangeTime}/>
                 <DataTable records={records} onClickDelete={onClickDeleteRecord}/>
                 <AddRecord onClick={onClickAddRecord}/>
-                <ErrorMessage message={error}/>
                 <TotalTime records={records} />
-            </>
+                <ErrorMessage message={error}/>
+            </div>
         );
     }
 };

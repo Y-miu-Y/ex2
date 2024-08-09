@@ -1,14 +1,17 @@
+import Button from 'react-bootstrap/Button';
+
 export const DataRow = ({ record, onClickDelete }) => {
     const styleTime = {
         padding: "5px",
     }
     
     return(
-        <>
-            <span>{record.title}</span>
-            <span style={styleTime}>{record.time}時間</span>
-            <button onClick={() => onClickDelete(record.id)}>削除</button>
-            <br/>
-        </>
+        <tr id={record.id}>
+            <td>{record.title}</td>
+            <td style={styleTime}>{record.time}時間</td>
+            <td>
+                <Button onClick={() => onClickDelete(record.id)} variant="outline-secondary">削除</Button>
+            </td>
+        </tr>
     );
 };
