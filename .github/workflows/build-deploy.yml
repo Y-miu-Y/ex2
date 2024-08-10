@@ -11,6 +11,12 @@ env:
   TESTENV_HELLO: "hello env"
 
 jobs:
+  test_env: 
+    runs-on: ubuntu-latest # 実行するOS
+    steps:
+      - run: echo "check your seacret env url" # 実行するコマンド
+      - run: echo "${{secrets.VITE_SUPABASE_URL}}" # 実行するコマンド
+
   build:
     name: build
     runs-on: ubuntu-latest
