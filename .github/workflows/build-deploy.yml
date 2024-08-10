@@ -1,9 +1,11 @@
-name: Scheduled build deploy
+name: build-with-deploy
 
 on:
   schedule:
     - cron: "0 6 * * *"
   workflow_dispatch:
+  push:
+    branches: [ master ]
 
 env:
   VITE_SUPABASE_URL: ${{secrets.VITE_SUPABASE_URL}}
