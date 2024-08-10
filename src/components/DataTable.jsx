@@ -1,5 +1,4 @@
-import { Table } from "react-bootstrap";
-import { DataRow } from "./DataRow";
+import { Table, Button } from "react-bootstrap";
 
 export const DataTable = ({records, onClickDelete}) => {
 
@@ -14,7 +13,13 @@ export const DataTable = ({records, onClickDelete}) => {
             </thead>
             <tbody>
                 {records.map((row) =>
-                    <DataRow key={row.id} record={row} onClickDelete={onClickDelete}/>
+                    <tr id={row.id} key={row.id}>
+                        <td>{row.title}</td>
+                        <td>{row.time}時間</td>
+                        <td>
+                            <Button onClick={() => onClickDelete(row.id)} variant="outline-secondary">削除</Button>
+                        </td>
+                    </tr>
                 )}
             </tbody>
         </Table>

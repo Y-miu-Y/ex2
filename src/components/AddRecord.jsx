@@ -1,9 +1,11 @@
+import { Button } from "react-bootstrap";
+
 export const AddRecord = ({onClick}) => {
 
     return (
         <>
             <div>
-                <button onClick={onClick}>登録</button>
+                <Button onClick={onClick} variant="primary">登録</Button>  
             </div>
         </>
     )

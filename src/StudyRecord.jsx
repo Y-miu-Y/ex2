@@ -67,13 +67,13 @@ export const StudyRecord = () =>{
 
     if(isLoading){
         return(
-            <>
+            <div className="container">
                 <LoadingView />
-            </>
+            </div>
         );
     } else {
         return(
-            <div>
+            <div className="container">
                 <Title />
                 <InputForm
                     title={title}
