@@ -5,6 +5,7 @@ import { StudyRecord } from './StudyRecord';
 
 const root = createRoot(document.getElementById("root"));
 
+console.log(process.env.TESTENV_HELLO);
 
 root.render(
   <StrictMode>
