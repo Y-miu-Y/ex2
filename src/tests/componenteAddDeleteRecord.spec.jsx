@@ -86,7 +86,7 @@ describe("", () => {
   });
 
   it("フォームの未入力バリデーション", async() => {
-    render(<StudyRecord />);Q
+    render(<StudyRecord />);
   
     // 読み込みに2秒待機
 
