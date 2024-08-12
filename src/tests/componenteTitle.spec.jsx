@@ -13,4 +13,5 @@ describe("Title Test", () => {
       expect(title).toHaveTextContent("学習記録一覧");
     }, 2 * 1000);
   });
+
 });

@@ -1,7 +1,7 @@
 export const ErrorMessage = ({message}) =>{
     return (
         <>
-            <div>{message}</div>
+            <div data-testid="errorMessage">{message}</div>
         </>
     );
 };

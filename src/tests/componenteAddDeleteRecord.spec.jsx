@@ -4,7 +4,7 @@ import '@testing-library/jest-dom';
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
-describe("Title Test", () => {
+describe("フォームに入力・削除", () => {
   it("フォームに入力・削除ができること", () => {
     // https://qiita.com/yassii_dev/items/dd83b9fb7230b4e7b9b9を参照
     const { user } = () =>{
@@ -34,7 +34,7 @@ describe("Title Test", () => {
       const inputTime = screen.getByTestId("inputTime");
       await user.type(inputTime, "12");
 
-      // 時間入力フォームに入力
+      // 登録ボタン押下
       const buttonAddRecord = screen.getByTestId("buttonAddRecord");
       buttonAddRecord.click();
 
@@ -58,6 +58,42 @@ describe("Title Test", () => {
     }, 2 * 1000);
   });
 
-  
+  it("フォームの未入力バリデーション", () => {
+    // https://qiita.com/yassii_dev/items/dd83b9fb7230b4e7b9b9を参照
+    const { user } = () =>{
+      const user = userEvent.setup();
+      return {
+        user,
+        ...render(<StudyRecord />)
+      }
+    };
+    setTimeout( async () => {
+      // 読み込みに2秒待機
+
+      // フォームに学習内容と時間を入力して登録ボタンを押すと新たに記録が追加されている
+      // 数が1つ増えていることをテストする
+
+      // レコード数をカウント
+      const recordTable = screen.getByTestId("recordTable");
+      const tableRowsBefore = recordTable.childElementCount;
+
+      // 文字入力フォームを未入力
+      const inputTitle = screen.getByTestId("inputTitle");
+      await user.type(inputTitle, "");
+
+      // 時間入力フォームを未入力
+      const inputTime = screen.getByTestId("inputTime");
+      await user.type(inputTime, "");
+
+      // 登録ボタンを押下
+      const buttonAddRecord = screen.getByTestId("buttonAddRecord");
+      buttonAddRecord.click();
+
+      const errorMessage = screen.getByTestId("errorMessage");
+
+      expect(errorMessage).toHaveTextContent("入力されていない項目があります");
+
+    }, 2 * 1000);
+  });
 
 });
