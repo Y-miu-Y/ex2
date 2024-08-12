@@ -8,33 +8,6 @@ import { jest } from '@jest/globals';
 
 
 describe("", () => {
-  const mockAdd = jest.fn().mockResolvedValue();
-  const mockDelete = jest.fn().mockResolvedValue();
-  const mockGet = jest.fn().mockResolvedValue(
-    {
-      id: "0",
-      title: "テスト",
-      time: 1,
-      "created-at": "2024-01-01 00:00:00.000000"
-    }
-  );
-
-  jest.mock("../utils/getStudyRecords", () => {
-    return{
-      getStudyRecords:()=>mockGet(),
-    }});
-
-  jest.mock("../utils/deleteStudyRecord", () => {
-    return{
-      deleteStudyRecord:()=>mockDelete(),
-    }});
-
-  jest.mock("../utils/addStudyRecord", () => {
-    return{
-      addStudyRecord:()=>mockAdd(),
-    }});
-  
-
   it("タイトルが学習記録一覧であること", async () => {
     // testId(title)を指定して取得
     render(<StudyRecord />);
@@ -43,6 +16,32 @@ describe("", () => {
   });
 
   it("フォームに入力・削除ができること", async () => {
+    const mockAdd = jest.fn().mockResolvedValue();
+    const mockDelete = jest.fn().mockResolvedValue();
+    const mockGet = jest.fn().mockResolvedValue(
+      {
+        id: "0",
+        title: "テスト",
+        time: 1,
+        "created-at": "2024-01-01 00:00:00.000000"
+      }
+    );
+
+    jest.mock("../utils/getStudyRecords.js", () => {
+      return{
+        getStudyRecords:()=>mockGet(),
+      }});
+
+    jest.mock("../utils/deleteStudyRecord.js", () => {
+      return{
+        deleteStudyRecord:()=>mockDelete(),
+      }});
+
+    jest.mock("../utils/addStudyRecord.js", () => {
+      return{
+        addStudyRecord:()=>mockAdd(),
+      }});
+    
     render(<StudyRecord />);
     // フォームに学習内容と時間を入力して登録ボタンを押すと新たに記録が追加されている
     // 数が1つ増えていることをテストする
