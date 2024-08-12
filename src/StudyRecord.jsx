@@ -4,9 +4,11 @@ import { useEffect, useState } from "react";
 import { AddRecord } from "./components/AddRecord";
 import { ErrorMessage } from "./components/ErrorMessage";
 import { TotalTime } from "./components/TotalTime";
-import { supabaseClient } from "./utils/supabaseClient";
 import { LoadingView } from "./LoadingView";
 import { Title } from "./components/Title";
+import { getStudyRecords } from "./utils/getStudyRecords";
+import { deleteStudyRecord } from "./utils/deleteStudyRecord";
+import { addStudyRecord } from "./utils/addStudyRecord";
 
 export const StudyRecord = () =>{
     const [title, setTitle] = useState("");
@@ -23,12 +25,8 @@ export const StudyRecord = () =>{
             setError("入力されていない項目があります");
             return;
         }
-        const insertRecord = async() => {
-            return await supabaseClient
-            .from('study-record')
-            .insert({title, time});
-        };
-        insertRecord();
+
+        addStudyRecord({title, time});
         
         const newRecords = [...records, {title, time}];
         setRecords(newRecords);
@@ -38,29 +36,17 @@ export const StudyRecord = () =>{
     }
 
     const onClickDeleteRecord = (uniqueKey) => {
-        const deleteRecord = async(key) => {
-            return await supabaseClient
-                .from('study-record')
-                .delete()
-                .eq('id', key);
-        };
-        deleteRecord(uniqueKey);
-
+        deleteStudyRecord(uniqueKey);
         const newRecords = records.filter((rec) => rec.id !== uniqueKey);
         setRecords(newRecords);
         setError("");
     }
 
     useEffect(() => {
-        const getRecords = async() => {
-            return await supabaseClient
-            .from('study-record')
-            .select();
-        }
-        getRecords()
-        .then((res) => {
-            setRecords(res.data)
-        }).finally(() => {
+        getStudyRecords().then(({data, error})=>{
+            setRecords(data);
+            if(error) console.error(error);
+        }).finally(()=>{
             setIsLoading(false);
         });
     },[]);
