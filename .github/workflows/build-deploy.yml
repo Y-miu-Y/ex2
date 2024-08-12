@@ -12,6 +12,7 @@ env:
   VITE_SUPABASE_ANON_KEY: ${{secrets.VITE_SUPABASE_ANON_KEY}}
   TESTENV_HELLO: "hello env"
 
+jobs:
   build:
     name: build
     runs-on: ubuntu-latest
