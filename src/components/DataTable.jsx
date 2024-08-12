@@ -11,7 +11,7 @@ export const DataTable = ({records, onClickDelete}) => {
                     <th>削除</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody data-testid="recordTable">
                 {records.map((row) =>
                     <tr id={row.id} key={row.id}>
                         <td>{row.title}</td>

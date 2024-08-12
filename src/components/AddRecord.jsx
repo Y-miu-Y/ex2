@@ -5,7 +5,7 @@ export const AddRecord = ({onClick}) => {
     return (
         <>
             <div>
-                <Button onClick={onClick} variant="primary">登録</Button>  
+                <Button data-testid="buttonAddRecord" onClick={onClick} variant="primary">登録</Button>  
             </div>
         </>
     )
