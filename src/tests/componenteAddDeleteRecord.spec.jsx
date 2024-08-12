@@ -1,99 +1,104 @@
 import { StudyRecord } from "../StudyRecord";
-import React from "react";
+import React, { act } from "react";
 import '@testing-library/jest-dom';
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { jest } from '@jest/globals';
 
-describe("フォームに入力・削除", () => {
-  it("フォームに入力・削除ができること", () => {
-    // https://qiita.com/yassii_dev/items/dd83b9fb7230b4e7b9b9を参照
-    const { user } = () =>{
-      const user = userEvent.setup();
-      return {
-        user,
-        ...render(<StudyRecord />)
-      }
-    };
-    setTimeout( async () => {
-      // 読み込みに2秒待機
 
-      // フォームに学習内容と時間を入力して登録ボタンを押すと新たに記録が追加されている
-      // 数が1つ増えていることをテストする
 
-      // レコード数をカウント
-      const recordTable = screen.getByTestId("recordTable");
-      const tableRowsBefore = recordTable.childElementCount;
+describe("", () => {
+  const mockAdd = jest.fn().mockResolvedValue();
+  const mockDelete = jest.fn().mockResolvedValue();
+  const mockGet = jest.fn().mockResolvedValue(
+    {
+      id: "0",
+      title: "テスト",
+      time: 1,
+      "created-at": "2024-01-01 00:00:00.000000"
+    }
+  );
 
-      const testTitle = "テスト用学習記録";
+  jest.mock("../utils/getStudyRecords", () => {
+    return{
+      getStudyRecords:()=>mockGet(),
+    }});
 
-      // 文字入力フォームに入力
-      const inputTitle = screen.getByTestId("inputTitle");
-      await user.type(inputTitle, testTitle);
+  jest.mock("../utils/deleteStudyRecord", () => {
+    return{
+      deleteStudyRecord:()=>mockDelete(),
+    }});
 
-      // 時間入力フォームに入力
-      const inputTime = screen.getByTestId("inputTime");
-      await user.type(inputTime, "12");
+  jest.mock("../utils/addStudyRecord", () => {
+    return{
+      addStudyRecord:()=>mockAdd(),
+    }});
+  
 
-      // 登録ボタン押下
-      const buttonAddRecord = screen.getByTestId("buttonAddRecord");
-      buttonAddRecord.click();
-
-      const tableRowsAfterAdd = recordTable.childElementCount;
-
-      expect(tableRowsAfterAdd).toBe( (tableRowsBefore + 1) );
-
-      // 削除ボタンを押すと学習記録が削除される
-      // 数が1つ減っていることをテストする
-      const addedRow = screen.getByRole("cell", {name: testTitle}).parentNode;
-      const deleteButon = addedRow.lastElementChild;
-      // 削除ボタン押下
-      buttonAddRecord.click();
-
-      // 削除後のテーブル要素数取得
-      const tableRowsAfterAddDelete = recordTable.childElementCount;
-
-      // カウント
-      expect(tableRowsAfterAddDelete).toBe( (tableRowsAfterAdd - 1 ));
-
-    }, 2 * 1000);
+  it("タイトルが学習記録一覧であること", async () => {
+    // testId(title)を指定して取得
+    render(<StudyRecord />);
+    const title = await screen.findByTestId("title");
+    expect(title).toHaveTextContent("学習記録一覧");
   });
 
-  it("フォームの未入力バリデーション", () => {
-    // https://qiita.com/yassii_dev/items/dd83b9fb7230b4e7b9b9を参照
-    const { user } = () =>{
-      const user = userEvent.setup();
-      return {
-        user,
-        ...render(<StudyRecord />)
-      }
-    };
-    setTimeout( async () => {
-      // 読み込みに2秒待機
+  it("フォームに入力・削除ができること", async () => {
+    render(<StudyRecord />);
+    // フォームに学習内容と時間を入力して登録ボタンを押すと新たに記録が追加されている
+    // 数が1つ増えていることをテストする
 
-      // フォームに学習内容と時間を入力して登録ボタンを押すと新たに記録が追加されている
-      // 数が1つ増えていることをテストする
+    // レコード数をカウント
+    const recordTableRows = await screen.findAllByRole("row");
+    const tableRowsBefore = recordTableRows.length;
 
-      // レコード数をカウント
-      const recordTable = screen.getByTestId("recordTable");
-      const tableRowsBefore = recordTable.childElementCount;
+    const testTitle = "テスト用学習記録";
 
-      // 文字入力フォームを未入力
-      const inputTitle = screen.getByTestId("inputTitle");
-      await user.type(inputTitle, "");
+    // 文字入力フォームに入力
+    const inputTitle = await screen.findByTestId("inputTitle");
+    await userEvent.type(inputTitle, testTitle);
 
-      // 時間入力フォームを未入力
-      const inputTime = screen.getByTestId("inputTime");
-      await user.type(inputTime, "");
+    // 時間入力フォームに入力
+    const inputTime = await screen.findByTestId("inputTime");
+    await userEvent.type(inputTime, "12");
 
-      // 登録ボタンを押下
-      const buttonAddRecord = screen.getByTestId("buttonAddRecord");
-      buttonAddRecord.click();
+    // 登録ボタン押下
+    const buttonAddRecord = await screen.findByTestId("buttonAddRecord");
+    await buttonAddRecord.click();
 
-      const errorMessage = screen.getByTestId("errorMessage");
+    const recordTableRowsAfterAdd = await screen.findAllByRole("row");
+    const afterAddCount = recordTableRowsAfterAdd.length;
 
-      expect(errorMessage).toHaveTextContent("入力されていない項目があります");
+    expect(afterAddCount).toBe( (tableRowsBefore + 1) );
 
-    }, 2 * 1000);
+    // 削除ボタンを押すと学習記録が削除される
+    // 数が1つ減っていることをテストする
+    const addedRow = (await screen.findAllByRole("cell", {name: testTitle}))[0].parentElement;
+    const deleteButon = addedRow.lastElementChild.firstElementChild;
+    // 削除ボタン押下
+    await deleteButon.click();
+
+    // 削除後のテーブル要素数取得
+    const recordTableRowsAfterDelete = await screen.findAllByRole("row");
+    const afterDeleteCount = recordTableRowsAfterDelete.length;
+
+    // カウント
+    expect(afterDeleteCount).toBe( (afterAddCount - 1 ));
   });
 
+  it("フォームの未入力バリデーション", async() => {
+    render(<StudyRecord />);Q
+  
+    // 読み込みに2秒待機
+
+    // 入力をしないで登録を押すとエラーが表示される
+
+    // 登録ボタンを押下
+    const buttonAddRecord = await screen.findByTestId("buttonAddRecord");
+    await buttonAddRecord.click();
+
+    const errorMessage = await screen.findByTestId("errorMessage");
+
+    expect(errorMessage).toHaveTextContent("入力されていない項目があります");
+
+  });
 });
